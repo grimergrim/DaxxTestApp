@@ -11,6 +11,10 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
 //        mLocalDataSource.savePosts(posts)
     }
 
+    override fun deletePosts() {
+        mLocalDataSource.deletePosts()
+    }
+
     override fun getPosts(): Flowable<List<Post>> {
         return mLocalDataSource.getPosts()
     }

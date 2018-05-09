@@ -13,8 +13,9 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.populateDb()
     }
 
-
-
+    override fun deletePosts() {
+        mRepository.deletePosts()
+    }
 
     override fun getPosts() {
         mRepository.getPosts().observeOn(AndroidSchedulers.mainThread())

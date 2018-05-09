@@ -11,4 +11,6 @@ interface Repository {
 
     fun getPosts(): Flowable<List<Post>>
 
+    fun deletePosts()
+
 }

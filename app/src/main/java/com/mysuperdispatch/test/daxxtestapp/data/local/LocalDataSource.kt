@@ -12,6 +12,8 @@ interface LocalDataSource {
 
     fun getPosts(): Flowable<List<Post>>
 
+    fun deletePosts()
+
 //    fun getUserByIdLocal(userId: Int): Observable<User>
 
 }

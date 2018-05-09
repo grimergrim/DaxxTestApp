@@ -11,8 +11,7 @@ import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.item_list.*
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
-
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class ListActivity : AppCompatActivity(), ListContract.ListView {
@@ -26,6 +25,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
 
         reload_button.setOnClickListener { mListPresenter.getPosts() }
         item_list.addOnScrollListener(recyclerViewOnScrollListener)
+        clear_button.setOnClickListener { mListPresenter.deletePosts() }
 //        clear_button.setOnClickListener { mListPresenter.deleteAllPosts() }
 
 //        TODO("get posts, hide error, show posts")

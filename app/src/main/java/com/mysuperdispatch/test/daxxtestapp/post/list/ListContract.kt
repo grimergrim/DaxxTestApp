@@ -16,6 +16,8 @@ interface ListContract {
 
         fun getPosts()
 
+        fun deletePosts()
+
     }
 
 }

@@ -23,6 +23,7 @@ interface PostDao {
     @Query("SELECT * FROM posts")
     fun getAllPosts(): Flowable<List<Post>>
 
-    @Query("SELECT * FROM (SELECT * FROM posts ORDER BY publishedAt DESC LIMIT 10) T1 ORDER BY publishedAt")
+    @Query("SELECT * FROM (SELECT * FROM posts ORDER BY publishedAt ASC LIMIT 10) T1 ORDER BY publishedAt")
     fun getPostsPerPage(): Flowable<List<Post>>
+
 }

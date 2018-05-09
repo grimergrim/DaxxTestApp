@@ -47,6 +47,12 @@ class LocalDataSourceImpl(private val postDao: PostDao) : LocalDataSource {
         return postDao.getAllPosts()
     }
 
+    override fun deletePosts() {
+        Thread(Runnable {
+            postDao.deleteAllPosts()
+        }).start()
+    }
+
 //    override fun saveUsers(users: List<User>) {
 //        usersCache = users
 //    }
