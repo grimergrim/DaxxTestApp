@@ -2,6 +2,8 @@ package com.mysuperdispatch.test.daxxtestapp.data
 
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import com.mysuperdispatch.test.daxxtestapp.data.local.LocalDataSource
+import io.reactivex.Flowable
+import io.reactivex.Observable
 
 class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository {
 
@@ -9,9 +11,9 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
 //        mLocalDataSource.savePosts(posts)
     }
 
-//    override fun getPostsLocal(): Observable<List<Post>> {
-//        return mLocalDataSource.getPostsLocal()
-//    }
+    override fun getPosts(): Flowable<List<Post>> {
+        return mLocalDataSource.getPosts()
+    }
 
     override fun populateDb() {
             mLocalDataSource.generatePosts()

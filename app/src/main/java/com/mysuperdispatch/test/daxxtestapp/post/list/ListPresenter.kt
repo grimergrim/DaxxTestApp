@@ -1,6 +1,9 @@
 package com.mysuperdispatch.test.daxxtestapp.post.list
 
+import android.util.Log
 import com.mysuperdispatch.test.daxxtestapp.util.Injection
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class ListPresenter(private val mListView: ListContract.ListView) : ListContract.ListPresenter {
 
@@ -14,13 +17,14 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
 
     override fun getPosts() {
-//        mRepository.getPostsLocal().observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ postsList ->
-//                    mListView.showPosts(postsList)
-//                }, { error ->
-//                    Log.e(TAG, error.message)
-//                })
+        mRepository.getPosts().observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ postsList ->
+
+                    mListView.showPosts(postsList)
+                }, { error ->
+                    Log.e(TAG, error.message)
+                })
     }
 
     companion object {

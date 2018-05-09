@@ -8,24 +8,15 @@
     android:fitsSystemWindows="true"
     tools:context=".post.list.ListActivity">
 
-    <LinearLayout
-        android:id="@+id/error_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <include layout="@layout/toolbar" />
 
-        <TextView
-            android:id="@+id/eror_text"
-            android:text="Ooops, something is wrong. Please, try again"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    <include layout="@layout/error_layout" />
 
     <FrameLayout
-        android:id="@+id/frameLayoutList"
+        android:id="@+id/frame_layout_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/app_bar_height_normal"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

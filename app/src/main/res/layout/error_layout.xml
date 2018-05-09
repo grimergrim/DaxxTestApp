@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/error_container"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/app_bar_height_normal"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:id="@+id/eror_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/error_text"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/reload_button"
+        android:layout_width="@dimen/app_bar_height_big"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:backgroundTint="@color/colorBackground"
+        android:text="@string/reload"
+        android:textAllCaps="false" />
+
+</LinearLayout>

@@ -1,7 +1,7 @@
 package com.mysuperdispatch.test.daxxtestapp.data
 
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
-import io.reactivex.Observable
+import io.reactivex.Flowable
 
 interface Repository {
 
@@ -9,6 +9,6 @@ interface Repository {
 
     fun savePosts(posts: List<Post>)
 
-//    fun getPostsLocal(): Observable<List<Post>>
+    fun getPosts(): Flowable<List<Post>>
 
 }

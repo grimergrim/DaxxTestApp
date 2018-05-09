@@ -21,5 +21,8 @@ interface PostDao {
     fun deleteAllPosts()
 
     @Query("SELECT * FROM posts")
-    fun getAllPosts(): Flowable<Post>
+    fun getAllPosts(): Flowable<List<Post>>
+
+    @Query("SELECT * FROM (SELECT * FROM posts ORDER BY publishedAt DESC LIMIT 10) T1 ORDER BY publishedAt")
+    fun getPostsPerPage(): Flowable<List<Post>>
 }

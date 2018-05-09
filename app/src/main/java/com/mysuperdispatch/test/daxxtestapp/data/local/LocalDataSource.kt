@@ -1,6 +1,8 @@
 package com.mysuperdispatch.test.daxxtestapp.data.local
 
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
+import io.reactivex.Flowable
+import io.reactivex.Observable
 
 interface LocalDataSource {
 
@@ -8,7 +10,7 @@ interface LocalDataSource {
 
     fun generatePosts()
 
-//    fun getPostsLocal(): Observable<List<Post>>
+    fun getPosts(): Flowable<List<Post>>
 
 //    fun getUserByIdLocal(userId: Int): Observable<User>
 

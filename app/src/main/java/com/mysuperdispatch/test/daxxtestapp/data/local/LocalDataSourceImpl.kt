@@ -2,6 +2,8 @@ package com.mysuperdispatch.test.daxxtestapp.data.local
 
 import com.mysuperdispatch.test.daxxtestapp.data.local.db.PostDao
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
+import io.reactivex.Flowable
+import io.reactivex.Observable
 
 class LocalDataSourceImpl(private val postDao: PostDao) : LocalDataSource {
 
@@ -20,9 +22,10 @@ class LocalDataSourceImpl(private val postDao: PostDao) : LocalDataSource {
     }
 
     private fun generatePost(i: Long) {
-        Thread.sleep(GENERATION_INTERVAL)
-        postDao.insertPost(Post("Title" + i, "Author" + i, System.currentTimeMillis()))
-        generatePost(i + 1)
+//        Thread.sleep(GENERATION_INTERVAL)
+//        postDao.insertPost(Post("Title" + i, "Author" + i, System.currentTimeMillis()))
+//        generatePost(i + 1)
+        //TODO("change for thread sleep")
     }
 
     private fun getNumberOfPosts(): Long {
@@ -38,6 +41,10 @@ class LocalDataSourceImpl(private val postDao: PostDao) : LocalDataSource {
 
     override fun savePost(post: Post) {
 //        TODO("implement")
+    }
+
+    override fun getPosts(): Flowable<List<Post>> {
+        return postDao.getAllPosts()
     }
 
 //    override fun saveUsers(users: List<User>) {

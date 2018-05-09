@@ -6,7 +6,7 @@ interface ListContract {
 
     interface ListView {
 
-//        fun showPosts(posts: List<Post>)
+        fun showPosts(posts: List<Post>)
 
     }
 
