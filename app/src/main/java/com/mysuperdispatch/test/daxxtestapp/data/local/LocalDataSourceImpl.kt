@@ -15,7 +15,8 @@ class LocalDataSourceImpl(private val postDao: PostDao,
         Thread(Runnable {
             if (prefsUtils.getFirstStart()) {
                 for (i in 1..POSTS_AMOUNT) {
-                    postDao.insertPost(Post("Title" + i, "Author" + i, System.currentTimeMillis()))
+                    postDao.insertPost(Post("Title" + i, "Author" + i,
+                            System.currentTimeMillis(), i.toLong()))
                 }
             prefsUtils.saveFirstStart()
             }
@@ -32,15 +33,14 @@ class LocalDataSourceImpl(private val postDao: PostDao,
         var counter: Long = i
         while (generate) {
             Thread.sleep(GENERATION_INTERVAL)
-            postDao.insertPost(Post("Title" + counter,
-                    "Author" + counter, System.currentTimeMillis()))
+            postDao.insertPost(Post("Title" + counter,"Author" + counter,
+                    System.currentTimeMillis(), counter))
             counter++
         }
     }
 
     private fun getNumberOfPosts(): Long {
-        return 100
-//        TODO("add long field to post and save i there and get max value here, or use ID if it's ok")
+        return postDao.getMaxIndex() + 1
     }
 
     override fun getPosts(): Single<List<Post>> {

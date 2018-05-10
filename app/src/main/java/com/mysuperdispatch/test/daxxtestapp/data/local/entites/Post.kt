@@ -10,7 +10,9 @@ class Post(@ColumnInfo(name = "title")
            @ColumnInfo(name = "author")
            val author: String,
            @ColumnInfo(name = "publishedAt")
-           val publishedAt: Long) {
+           val publishedAt: Long,
+           @ColumnInfo(name = "index")
+           val index: Long) {
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

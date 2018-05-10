@@ -1,6 +1,5 @@
 package com.mysuperdispatch.test.daxxtestapp.post.list
 
-import android.R.attr.data
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
