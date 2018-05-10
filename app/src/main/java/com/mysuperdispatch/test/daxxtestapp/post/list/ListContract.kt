@@ -11,6 +11,8 @@ interface ListContract {
 
         fun addNewPosts(posts: List<Post>)
 
+        fun addPostsPerPage(posts: List<Post>)
+
         fun updateNewPostsCounter(count: Long);
 
     }

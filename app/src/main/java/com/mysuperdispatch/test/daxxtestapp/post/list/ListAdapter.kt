@@ -33,6 +33,11 @@ class ListAdapter(private val values: LinkedList<Post>) :
         notifyDataSetChanged()
     }
 
+    fun addPostsPerPage(posts: List<Post>) {
+        values.addAll(posts)
+        notifyDataSetChanged()
+    }
+
     fun clear() {
         values.clear()
         notifyDataSetChanged()

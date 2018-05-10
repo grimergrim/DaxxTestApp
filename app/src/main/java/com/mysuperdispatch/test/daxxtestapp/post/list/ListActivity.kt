@@ -40,6 +40,9 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             mListPresenter.getNewPosts()
 //            mListPresenter.getNewPostsCount()
         }
+
+        //TODO on screen orientation changed new post counter gets 2 streams!!
+        //TODO also sometimes I got crashes - fix it
     }
 
     override fun onResume() {
@@ -54,6 +57,11 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
 
     override fun addNewPosts(posts: List<Post>) {
         adapter.addNewPosts(posts)
+        item_list.smoothScrollToPosition(0)
+    }
+
+    override fun addPostsPerPage(posts: List<Post>) {
+        adapter.addPostsPerPage(posts)
     }
 
     override fun showPosts(posts: List<Post>) {
@@ -93,6 +101,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             super.onScrolled(recyclerView, dx, dy)
             if (!(recyclerView?.canScrollVertically(1))!!) {
                 Log.e(TAG, "LOAD!")
+                mListPresenter.getPostsPerPage()
             }
         }
     }

@@ -12,17 +12,11 @@ import io.reactivex.Single
 @Dao
 interface PostDao {
 
-    @Query("SELECT * FROM posts WHERE id = :id")
-    fun getPostById(id: String): Flowable<Post>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPost(post: Post)
 
     @Query("DELETE FROM posts")
     fun deleteAllPosts()
-
-    @Query("SELECT * FROM posts ORDER BY publishedAt DESC")
-    fun getAllPosts(): Single<List<Post>>
 
     @Query("SELECT MAX(`index`) FROM posts")
     fun getMaxIndex(): Long

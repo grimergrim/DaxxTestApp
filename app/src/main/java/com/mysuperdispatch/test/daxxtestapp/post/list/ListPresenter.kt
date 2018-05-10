@@ -52,13 +52,13 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getPostsPerPage(lastSmallestShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    mListView.showPosts(postsList)
+                    mListView.addPostsPerPage(postsList.reversed())
                     if (postsList.size > 0) {
                         val max = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
                         val min = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
                         Log.e(TAG, "lastShownDate  setting " + max)
                         Log.e(TAG, "lastSmallestShownDate setting " + min)
-                        lastShownDate = max
+//                        lastShownDate = max
                         lastSmallestShownDate = min
                     }
                 }, { error ->
@@ -79,7 +79,7 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                         Log.e(TAG, "lastShownDate  setting " + max)
                         Log.e(TAG, "lastSmallestShownDate setting " + min)
                         lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
-                        lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
+//                        lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
                     }
 
                 }, { error ->
