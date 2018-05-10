@@ -25,18 +25,21 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
         setTransition()
         setContentView(R.layout.activity_list)
         mListPresenter = ListPresenter(this)
-        reload_button.setOnClickListener { mListPresenter.getPosts() }
+
+        mListPresenter.getNewPostsCount()
+
         item_list.addOnScrollListener(recyclerViewOnScrollListener)
+
+        reload_button.setOnClickListener { mListPresenter.getPostsRefresh() }
+        swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPostsRefresh() })
         clear_button.setOnClickListener {
             adapter.clear()
             mListPresenter.deletePosts()
         }
-        swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPosts() })
         new_posts_counter.setOnClickListener {
             mListPresenter.getNewPosts()
 //            mListPresenter.getNewPostsCount()
         }
-        mListPresenter.getNewPostsCount()
     }
 
     override fun onResume() {

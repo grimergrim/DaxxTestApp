@@ -15,8 +15,12 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
         mLocalDataSource.deletePosts()
     }
 
-    override fun getPosts(): Single<List<Post>> {
-        return mLocalDataSource.getPosts()
+    override fun getPostsPerPage(lastSmallestShownDate: Long): Single<List<Post>> {
+        return mLocalDataSource.getPostsPerPage(lastSmallestShownDate)
+    }
+
+    override fun getPostsRefresh(lastShownDate: Long): Single<List<Post>> {
+        return mLocalDataSource.getPostsRefresh(lastShownDate)
     }
 
     override fun startPostGeneration() {

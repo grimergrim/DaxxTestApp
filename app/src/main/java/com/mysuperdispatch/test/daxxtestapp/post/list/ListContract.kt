@@ -19,7 +19,9 @@ interface ListContract {
 
         fun startPostGeneration()
 
-        fun getPosts()
+        fun getPostsPerPage()
+
+        fun getPostsRefresh()
 
         fun deletePosts()
 

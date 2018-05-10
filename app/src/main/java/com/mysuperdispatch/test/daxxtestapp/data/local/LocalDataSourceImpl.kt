@@ -51,8 +51,12 @@ class LocalDataSourceImpl(private val postDao: PostDao,
         return postDao.getMaxIndex() + 1
     }
 
-    override fun getPosts(): Single<List<Post>> {
-        return postDao.getAllPosts()
+    override fun getPostsPerPage(lastSmallestShownDate: Long): Single<List<Post>> {
+        return postDao.getPostsPerPage(lastSmallestShownDate)
+    }
+
+    override fun getPostsRefresh(lastShownDate: Long): Single<List<Post>> {
+        return postDao.getPostsRefresh()
     }
 
     override fun deletePosts() {
