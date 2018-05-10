@@ -2,30 +2,40 @@ package com.mysuperdispatch.test.daxxtestapp.data.local
 
 import com.mysuperdispatch.test.daxxtestapp.data.local.db.PostDao
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
+import com.mysuperdispatch.test.daxxtestapp.util.PrefsUtils
 import io.reactivex.Flowable
-import io.reactivex.Observable
+import io.reactivex.Single
 
-class LocalDataSourceImpl(private val postDao: PostDao) : LocalDataSource {
+class LocalDataSourceImpl(private val postDao: PostDao,
+                          private val prefsUtils: PrefsUtils) : LocalDataSource {
 
-    override fun generatePosts() {
+    private var generate: Boolean = false
+
+    override fun startPostGeneration() {
         Thread(Runnable {
-            if (isFirstStart()) {
+            if (prefsUtils.getFirstStart()) {
                 for (i in 1..POSTS_AMOUNT) {
                     postDao.insertPost(Post("Title" + i, "Author" + i, System.currentTimeMillis()))
                 }
-//                TODO("save that first start happened")
+            prefsUtils.saveFirstStart()
             }
-
+            generate = true
             generatePost(getNumberOfPosts())
-
         }).start()
     }
 
+    override fun stopPostGeneration() {
+        generate = false
+    }
+
     private fun generatePost(i: Long) {
-//        Thread.sleep(GENERATION_INTERVAL)
-//        postDao.insertPost(Post("Title" + i, "Author" + i, System.currentTimeMillis()))
-//        generatePost(i + 1)
-        //TODO("change for thread sleep")
+        var counter: Long = i
+        while (generate) {
+            Thread.sleep(GENERATION_INTERVAL)
+            postDao.insertPost(Post("Title" + counter,
+                    "Author" + counter, System.currentTimeMillis()))
+            counter++
+        }
     }
 
     private fun getNumberOfPosts(): Long {
@@ -33,17 +43,7 @@ class LocalDataSourceImpl(private val postDao: PostDao) : LocalDataSource {
 //        TODO("add long field to post and save i there and get max value here, or use ID if it's ok")
     }
 
-    private fun isFirstStart(): Boolean {
-        return true;
-//        TODO("save bool to prefs and get it from there")
-    }
-
-
-    override fun savePost(post: Post) {
-//        TODO("implement")
-    }
-
-    override fun getPosts(): Flowable<List<Post>> {
+    override fun getPosts(): Single<List<Post>> {
         return postDao.getAllPosts()
     }
 

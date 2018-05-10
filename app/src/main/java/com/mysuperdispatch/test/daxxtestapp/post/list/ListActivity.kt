@@ -13,29 +13,32 @@ import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.item_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 
-
 class ListActivity : AppCompatActivity(), ListContract.ListView {
 
     private lateinit var mListPresenter: ListContract.ListPresenter
+    private lateinit var adapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTransition()
         setContentView(R.layout.activity_list)
-
+        mListPresenter = ListPresenter(this)
         reload_button.setOnClickListener { mListPresenter.getPosts() }
         item_list.addOnScrollListener(recyclerViewOnScrollListener)
-        clear_button.setOnClickListener { mListPresenter.deletePosts() }
-//        clear_button.setOnClickListener { mListPresenter.deleteAllPosts() }
+        clear_button.setOnClickListener {
+            adapter.clear()
+            mListPresenter.deletePosts() }
+        swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPosts() })
+    }
 
-//        TODO("get posts, hide error, show posts")
-        mListPresenter = ListPresenter(this)
-//        showPosts(listOf(
-//                Post("1", "1", System.currentTimeMillis()),
-//                Post("1", "1", System.currentTimeMillis())))
-        swipe_refresh_list.setOnRefreshListener({ refresh() })
-//        item_list.
-        mListPresenter.launch()
+    override fun onResume() {
+        super.onResume()
+        mListPresenter.startPostGeneration()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mListPresenter.stopPostGeneration()
     }
 
     override fun showPosts(posts: List<Post>) {
@@ -46,11 +49,8 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, posts: List<Post>) {
-        recyclerView.adapter = ListAdapter(posts)
-    }
-
-    private fun refresh() {
-        mListPresenter.getPosts()
+        adapter = ListAdapter(posts.toMutableList())
+        recyclerView.adapter = adapter
     }
 
     private fun setTransition() {

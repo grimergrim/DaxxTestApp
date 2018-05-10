@@ -9,8 +9,12 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
     private val mRepository = Injection.getRepositoryInstance()
 
-    override fun launch() {
-        mRepository.populateDb()
+    override fun startPostGeneration() {
+        mRepository.startPostGeneration()
+    }
+
+    override fun stopPostGeneration() {
+        mRepository.stopPostGeneration()
     }
 
     override fun deletePosts() {
@@ -21,10 +25,9 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getPosts().observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-
                     mListView.showPosts(postsList)
                 }, { error ->
-                    Log.e(TAG, error.message)
+                    Log.e(TAG, error.message) //TODO show error screen
                 })
     }
 

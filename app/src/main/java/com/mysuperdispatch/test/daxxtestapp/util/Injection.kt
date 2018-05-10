@@ -12,12 +12,14 @@ object Injection {
 
     private lateinit var mRepository: Repository
     private lateinit var mLocalDataSource: LocalDataSource
+    private lateinit var mPrefsUtils: PrefsUtils
 
     private var initialized: Boolean = false
 
     fun initGraph(context: Context) {
         if (!initialized) {
-            mLocalDataSource = LocalDataSourceImpl(provideUserDao(context))
+            mPrefsUtils = PrefsUtils(context)
+            mLocalDataSource = LocalDataSourceImpl(provideUserDao(context), mPrefsUtils)
             mRepository = RepositoryImpl(mLocalDataSource)
             initialized = true
         }

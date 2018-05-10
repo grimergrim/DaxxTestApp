@@ -2,15 +2,18 @@ package com.mysuperdispatch.test.daxxtestapp.data
 
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 interface Repository {
 
-    fun populateDb()
+    fun startPostGeneration()
 
     fun savePosts(posts: List<Post>)
 
-    fun getPosts(): Flowable<List<Post>>
+    fun getPosts(): Single<List<Post>>
 
     fun deletePosts()
+
+    fun stopPostGeneration()
 
 }

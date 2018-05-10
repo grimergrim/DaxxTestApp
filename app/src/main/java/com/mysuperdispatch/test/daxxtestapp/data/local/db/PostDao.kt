@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface PostDao {
@@ -21,7 +22,7 @@ interface PostDao {
     fun deleteAllPosts()
 
     @Query("SELECT * FROM posts")
-    fun getAllPosts(): Flowable<List<Post>>
+    fun getAllPosts(): Single<List<Post>>
 
     @Query("SELECT * FROM (SELECT * FROM posts ORDER BY publishedAt ASC LIMIT 10) T1 ORDER BY publishedAt")
     fun getPostsPerPage(): Flowable<List<Post>>

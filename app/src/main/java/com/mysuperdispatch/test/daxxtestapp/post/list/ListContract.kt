@@ -12,11 +12,13 @@ interface ListContract {
 
     interface ListPresenter {
 
-        fun launch()
+        fun startPostGeneration()
 
         fun getPosts()
 
         fun deletePosts()
+
+        fun stopPostGeneration()
 
     }
 
