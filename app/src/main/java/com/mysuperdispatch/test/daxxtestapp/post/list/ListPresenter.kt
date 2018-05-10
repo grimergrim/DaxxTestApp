@@ -4,6 +4,7 @@ import android.util.Log
 import com.mysuperdispatch.test.daxxtestapp.util.Injection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.DisposableSubscriber
 
 class ListPresenter(private val mListView: ListContract.ListView) : ListContract.ListPresenter {
 
@@ -21,17 +22,19 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
     override fun deletePosts() {
         mRepository.deletePosts()
+        lastShownDate = 0
+        lastSmallestShownDate = Long.MAX_VALUE
     }
 
     override fun getPostsRefresh() {
         mRepository.getPostsRefresh(lastShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    mListView.showPosts(postsList)
                     if (postsList.size > 0) {
                         lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
                         lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
                     }
+                    mListView.showPosts(postsList)
                 }, { error ->
                     Log.e(TAG, error.message) //TODO show error screen
                 })
@@ -41,10 +44,10 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getPostsPerPage(lastSmallestShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    mListView.addPostsPerPage(postsList.reversed())
                     if (postsList.size > 0) {
                         lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
                     }
+                    mListView.addPostsPerPage(postsList.reversed())
                 }, { error ->
                     Log.e(TAG, error.message) //TODO show error screen
                 })
@@ -54,11 +57,10 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getNewPosts(lastShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    mListView.addNewPosts(postsList)
                     if (postsList.size > 0) {
                         lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
                     }
-
+                    mListView.addNewPosts(postsList)
                 }, { error ->
                     Log.e(TAG, error.message) //TODO show error screen
                 })
@@ -69,39 +71,33 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         private val TAG = ListPresenter::class.java.simpleName
     }
 
-//    var mySubscriber: MySubscriber = MySubscriber(mListView)
+    var mySubscriber: MySubscriber = MySubscriber(mListView)
 
     override fun getNewPostsCount() {
-//        mySubscriber.dispose()
-//        mRepository.getNewPostsCount(lastShownDate)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribeWith(mySubscriber)
-
-
+        mySubscriber.dispose()
+        mySubscriber = MySubscriber(mListView)
+        Log.e(TAG, "lastShownDate " + lastShownDate)
         mRepository.getNewPostsCount(lastShownDate)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({ numberOfNewPosts ->
-                    mListView.updateNewPostsCounter(numberOfNewPosts)
-                }, { error ->
-                    Log.e(TAG, error.message)
-                })
+                .subscribeWith(mySubscriber)
     }
 
-//    class MySubscriber(private val mListView: ListContract.ListView) : DisposableSubscriber<Long>() {
-//        override fun onComplete() {
-//
-//        }
-//
-//        override fun onNext(numberOfNewPosts: Long?) {
-//            mListView.updateNewPostsCounter(numberOfNewPosts!!)
-//        }
-//
-//        override fun onError(t: Throwable?) {
-//            Log.e(TAG, t!!.message) //TODO handle
-//        }
+    class MySubscriber(private val mListView: ListContract.ListView) : DisposableSubscriber<Long>() {
+        override fun onComplete() {
+            Log.e(TAG, "Comleted")
+        }
 
+        override fun onNext(numberOfNewPosts: Long?) {
+            Log.e(TAG, "onNext " + numberOfNewPosts)
+            mListView.updateNewPostsCounter(numberOfNewPosts!!)
+        }
 
+        override fun onError(t: Throwable?) {
+            Log.e(TAG, "Error")
+            Log.e(TAG, t!!.message) //TODO handle
+        }
+
+    }
 }
 

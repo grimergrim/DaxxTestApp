@@ -65,19 +65,6 @@ class LocalDataSourceImpl(private val postDao: PostDao,
         }).start()
     }
 
-//    override fun saveUsers(users: List<User>) {
-//        usersCache = users
-//    }
-//
-//    override fun getPostsLocal(): Observable<List<Post>> {
-//        return Observable.just(postsCache)
-//    }
-//
-//    override fun getUserByIdLocal(userId: Int): Observable<User> {
-//        val selectedUser: User = usersCache.single { user -> user.id == userId }
-//        return Observable.just(selectedUser)
-//    }
-
     companion object {
         private val POSTS_AMOUNT = 100
         private val GENERATION_INTERVAL = 1000L //1 sec

@@ -25,11 +25,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
         setTransition()
         setContentView(R.layout.activity_list)
         mListPresenter = ListPresenter(this)
-
-        mListPresenter.getNewPostsCount()
-
         item_list.addOnScrollListener(recyclerViewOnScrollListener)
-
         reload_button.setOnClickListener { mListPresenter.getPostsRefresh() }
         swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPostsRefresh() })
         clear_button.setOnClickListener {
@@ -38,11 +34,8 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
         }
         new_posts_counter.setOnClickListener {
             mListPresenter.getNewPosts()
-//            mListPresenter.getNewPostsCount()
+            mListPresenter.getNewPostsCount()
         }
-
-        //TODO on screen orientation changed new post counter gets 2 streams!!
-        //TODO also sometimes I got crashes - fix it
     }
 
     override fun onResume() {
@@ -58,6 +51,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     override fun addNewPosts(posts: List<Post>) {
         adapter.addNewPosts(posts)
         item_list.smoothScrollToPosition(0)
+        mListPresenter.getNewPostsCount()
     }
 
     override fun addPostsPerPage(posts: List<Post>) {
@@ -70,6 +64,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
         clear_button.visibility = View.VISIBLE
         if (swipe_refresh_list.isRefreshing) swipe_refresh_list.isRefreshing = false
         setupRecyclerView(item_list, posts)
+        mListPresenter.getNewPostsCount()
     }
 
     override fun updateNewPostsCounter(count: Long) {
@@ -99,7 +94,8 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if (!(recyclerView?.canScrollVertically(1))!!) {
+            if (!(recyclerView?.canScrollVertically(1))!!
+                    && recyclerView.adapter.itemCount >= 10) {
                 Log.e(TAG, "LOAD!")
                 mListPresenter.getPostsPerPage()
             }
