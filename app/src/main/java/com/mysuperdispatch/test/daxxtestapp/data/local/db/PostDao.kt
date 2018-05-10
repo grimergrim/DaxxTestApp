@@ -21,13 +21,16 @@ interface PostDao {
     @Query("DELETE FROM posts")
     fun deleteAllPosts()
 
-    @Query("SELECT * FROM posts")
+    @Query("SELECT * FROM posts ORDER BY publishedAt DESC")
     fun getAllPosts(): Single<List<Post>>
 
-    @Query("SELECT * FROM (SELECT * FROM posts ORDER BY publishedAt ASC LIMIT 10) T1 ORDER BY publishedAt")
+    @Query("SELECT * FROM (SELECT * FROM posts ORDER BY publishedAt DESC LIMIT 10) T1 ORDER BY publishedAt")
     fun getPostsPerPage(): Flowable<List<Post>>
 
     @Query("SELECT MAX(`index`) FROM posts")
     fun getMaxIndex(): Long
+
+    @Query("SELECT COUNT(*) FROM posts WHERE publishedAt > :lastShownDate")
+    fun getNewPostsCount(lastShownDate: Long): Flowable<Long>
 
 }

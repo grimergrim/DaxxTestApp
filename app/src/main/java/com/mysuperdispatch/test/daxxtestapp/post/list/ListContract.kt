@@ -8,6 +8,8 @@ interface ListContract {
 
         fun showPosts(posts: List<Post>)
 
+        fun updateNewPostsCounter(count: Long);
+
     }
 
     interface ListPresenter {
@@ -19,6 +21,8 @@ interface ListContract {
         fun deletePosts()
 
         fun stopPostGeneration()
+
+        fun getNewPostsCount()
 
     }
 

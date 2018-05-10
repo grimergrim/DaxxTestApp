@@ -27,4 +27,8 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
         mLocalDataSource.stopPostGeneration()
     }
 
+    override fun getNewPostsCount(lastShownDate: Long): Flowable<Long> {
+        return mLocalDataSource.getNewPostsCount(lastShownDate)
+    }
+
 }

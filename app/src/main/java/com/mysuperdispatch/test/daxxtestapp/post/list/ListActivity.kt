@@ -29,6 +29,8 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             adapter.clear()
             mListPresenter.deletePosts() }
         swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPosts() })
+        new_posts_counter.setOnClickListener {  } //TODO set listener
+        mListPresenter.getNewPostsCount()
     }
 
     override fun onResume() {
@@ -44,8 +46,19 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     override fun showPosts(posts: List<Post>) {
         error_container.visibility = View.GONE
         frame_layout_list.visibility = View.VISIBLE
+        clear_button.visibility = View.VISIBLE
         if (swipe_refresh_list.isRefreshing) swipe_refresh_list.isRefreshing = false
         setupRecyclerView(item_list, posts)
+    }
+
+    override fun updateNewPostsCounter(count: Long) {
+        if (frame_layout_list.visibility == View.VISIBLE && count > 0) {
+            new_posts_counter.visibility = View.VISIBLE
+            new_posts_counter.text = String.format(getString(R.string.new_posts), count)
+        } else {
+            new_posts_counter.visibility = View.GONE
+        }
+
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, posts: List<Post>) {

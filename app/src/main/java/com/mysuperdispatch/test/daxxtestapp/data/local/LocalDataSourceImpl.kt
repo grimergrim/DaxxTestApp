@@ -29,6 +29,10 @@ class LocalDataSourceImpl(private val postDao: PostDao,
         generate = false
     }
 
+    override fun getNewPostsCount(lastShownDate: Long): Flowable<Long> {
+        return postDao.getNewPostsCount(lastShownDate)
+    }
+
     private fun generatePost(i: Long) {
         var counter: Long = i
         while (generate) {

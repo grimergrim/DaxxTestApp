@@ -7,4 +7,5 @@
     <string name="reload">Reload</string>
     <string name="clear">clear</string>
     <string name="toolbar_title">Posts</string>
+    <string name="new_posts">%s new posts</string>
 </resources>

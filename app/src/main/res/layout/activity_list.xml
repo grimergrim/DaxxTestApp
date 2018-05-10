@@ -5,12 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundDark"
-    android:fitsSystemWindows="true"
     tools:context=".post.list.ListActivity">
 
     <include layout="@layout/toolbar" />
 
     <include layout="@layout/error_layout" />
+
+    <Button
+        android:id="@+id/new_posts_counter"
+        android:layout_width="wrap_content"
+        android:minHeight="0dp"
+        android:padding="@dimen/small_text_margin"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/app_bar_height_normal"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/new_posts"
+        android:textAllCaps="false"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/colorBackground"
+        android:background="@drawable/round_corners_button"
+        android:textSize="@dimen/small_text_size"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <FrameLayout
         android:id="@+id/frame_layout_list"
@@ -18,7 +36,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/app_bar_height_normal"
         android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="visible">
 
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipe_refresh_list"

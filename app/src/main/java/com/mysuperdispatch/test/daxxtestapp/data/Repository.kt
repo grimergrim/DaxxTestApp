@@ -16,4 +16,6 @@ interface Repository {
 
     fun stopPostGeneration()
 
+    fun getNewPostsCount(lastShownDate: Long): Flowable<Long>
+
 }

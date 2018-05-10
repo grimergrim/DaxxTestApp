@@ -15,6 +15,8 @@ interface LocalDataSource {
 
     fun deletePosts()
 
+    fun getNewPostsCount(lastShownDate: Long): Flowable<Long>
+
 //    fun getUserByIdLocal(userId: Int): Observable<User>
 
 }
