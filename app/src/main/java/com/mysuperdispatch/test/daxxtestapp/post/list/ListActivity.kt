@@ -35,12 +35,14 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             mListPresenter.getNewPosts()
             mListPresenter.getNewPostsCount()
         }
+        Log.d(TAG, "create")
     }
 
     override fun onResume() {
         super.onResume()
         mListPresenter.startPostGeneration()
         mListPresenter.getNewPostsCount()
+        Log.d(TAG, "resume")
     }
 
     override fun onPause() {
