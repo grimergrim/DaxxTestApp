@@ -53,6 +53,8 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 })
     }
 
+    //TODO handle errors every were
+
     override fun getNewPosts() {
         mRepository.getNewPosts(lastShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -66,6 +68,9 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 })
     }
 
+    override fun onPause() {
+        mySubscriber.dispose()
+    }
 
     companion object {
         private val TAG = ListPresenter::class.java.simpleName

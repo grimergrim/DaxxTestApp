@@ -2,7 +2,6 @@ package com.mysuperdispatch.test.daxxtestapp.post.list
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.transition.Explode
 import android.util.Log
@@ -41,6 +40,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     override fun onResume() {
         super.onResume()
         mListPresenter.startPostGeneration()
+        mListPresenter.getNewPostsCount()
     }
 
     override fun onPause() {
@@ -103,7 +103,6 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     }
 
     companion object {
-        private val PAGE_SIZE: Int = 10
         private val TAG = ListActivity::class.java.simpleName
     }
 

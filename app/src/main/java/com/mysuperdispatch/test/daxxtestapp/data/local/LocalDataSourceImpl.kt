@@ -1,32 +1,43 @@
 package com.mysuperdispatch.test.daxxtestapp.data.local
 
+import android.util.Log
 import com.mysuperdispatch.test.daxxtestapp.data.local.db.PostDao
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import com.mysuperdispatch.test.daxxtestapp.util.PrefsUtils
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
 
 class LocalDataSourceImpl(private val postDao: PostDao,
                           private val prefsUtils: PrefsUtils) : LocalDataSource {
 
-    private var generate: Boolean = false
+    private var fixedRateTimer = fixedRateTimer(System.currentTimeMillis().toString(), false,
+            0.toLong(), 1000) {
+
+    }
 
     override fun startPostGeneration() {
-        Thread(Runnable {
-            if (prefsUtils.getFirstStart()) {
-                for (i in 1..POSTS_AMOUNT) {
-                    postDao.insertPost(Post("Title" + i, "Author" + i,
-                            System.currentTimeMillis(), i.toLong()))
-                }
-            prefsUtils.saveFirstStart()
+        fixedRateTimer.cancel()
+        if (prefsUtils.getFirstStart()) {
+            for (i in 1..POSTS_AMOUNT) {
+                postDao.insertPost(Post("Title" + i, "Author" + i,
+                        System.currentTimeMillis(), i.toLong()))
             }
-            generate = true
+            prefsUtils.saveFirstStart()
+        }
+        fixedRateTimer = fixedRateTimer(java.lang.System.currentTimeMillis().toString(), false,
+                0.toLong(), 1000) {
             generatePost(getNumberOfPosts())
-        }).start()
+        }
+    }
+
+    private fun generatePost(i: Long) {
+        postDao.insertPost(Post("Title" + i, "Author" + i, System.currentTimeMillis(), i))
     }
 
     override fun stopPostGeneration() {
-        generate = false
+        fixedRateTimer.cancel()
     }
 
     override fun getNewPostsCount(lastShownDate: Long): Flowable<Long> {
@@ -35,16 +46,6 @@ class LocalDataSourceImpl(private val postDao: PostDao,
 
     override fun getNewPosts(lastShownDate: Long): Single<List<Post>> {
         return postDao.getNewPosts(lastShownDate)
-    }
-
-    private fun generatePost(i: Long) {
-        var counter: Long = i
-        while (generate) {
-            Thread.sleep(GENERATION_INTERVAL)
-            postDao.insertPost(Post("Title" + counter,"Author" + counter,
-                    System.currentTimeMillis(), counter))
-            counter++
-        }
     }
 
     private fun getNumberOfPosts(): Long {

@@ -33,6 +33,7 @@ interface ListContract {
 
         fun getNewPosts()
 
+        fun onPause()
     }
 
 }
