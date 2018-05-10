@@ -1,12 +1,10 @@
 package com.mysuperdispatch.test.daxxtestapp.post.list
 
 import android.util.Log
-import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import com.mysuperdispatch.test.daxxtestapp.util.Injection
-import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.DisposableSubscriber
 
 class ListPresenter(private val mListView: ListContract.ListView) : ListContract.ListPresenter {
 
@@ -52,14 +50,39 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         private val TAG = ListPresenter::class.java.simpleName
     }
 
+//    var mySubscriber: MySubscriber = MySubscriber(mListView)
+
     override fun getNewPostsCount() {
-        mRepository.getNewPostsCount(lastShownDate).observeOn(AndroidSchedulers.mainThread())
+//        mySubscriber.dispose()
+//        mRepository.getNewPostsCount(lastShownDate)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribeWith(mySubscriber)
+
+
+        mRepository.getNewPostsCount(lastShownDate)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ numberOfNewPosts ->
                     mListView.updateNewPostsCounter(numberOfNewPosts)
                 }, { error ->
-                    Log.e(TAG, error.message) //TODO handle
+                    Log.e(TAG, error.message)
                 })
     }
 
+//    class MySubscriber(private val mListView: ListContract.ListView) : DisposableSubscriber<Long>() {
+//        override fun onComplete() {
+//
+//        }
+//
+//        override fun onNext(numberOfNewPosts: Long?) {
+//            mListView.updateNewPostsCounter(numberOfNewPosts!!)
+//        }
+//
+//        override fun onError(t: Throwable?) {
+//            Log.e(TAG, t!!.message) //TODO handle
+//        }
+
+
 }
+

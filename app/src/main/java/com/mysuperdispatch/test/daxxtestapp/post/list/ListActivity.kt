@@ -2,8 +2,10 @@ package com.mysuperdispatch.test.daxxtestapp.post.list
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.transition.Explode
+import android.util.Log
 import android.view.View
 import android.view.Window
 import com.mysuperdispatch.test.daxxtestapp.R
@@ -27,9 +29,13 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
         item_list.addOnScrollListener(recyclerViewOnScrollListener)
         clear_button.setOnClickListener {
             adapter.clear()
-            mListPresenter.deletePosts() }
+            mListPresenter.deletePosts()
+        }
         swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPosts() })
-        new_posts_counter.setOnClickListener { mListPresenter.getNewPosts() }
+        new_posts_counter.setOnClickListener {
+            mListPresenter.getNewPosts()
+//            mListPresenter.getNewPostsCount()
+        }
         mListPresenter.getNewPostsCount()
     }
 
@@ -82,18 +88,15 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     private val recyclerViewOnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-//            val visibleItemCount = layoutManager.getChildCount()
-//            val totalItemCount = layoutManager.getItemCount()
-//            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-//
-//            if (!isLoading && !isLastPage) {
-//                if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
-//                        && firstVisibleItemPosition >= 0
-//                        && totalItemCount >= PAGE_SIZE) {
-//                    loadMoreItems()
-//                }
-//            }
+            if (!(recyclerView?.canScrollVertically(1))!!) {
+                Log.e(TAG, "LOAD!")
+            }
         }
+    }
+
+    companion object {
+        private val PAGE_SIZE: Int = 10
+        private val TAG = ListActivity::class.java.simpleName
     }
 
 }
