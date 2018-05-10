@@ -36,7 +36,8 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                     }
                     mListView.showPosts(postsList)
                 }, { error ->
-                    Log.e(TAG, error.message) //TODO show error screen
+                    Log.e(TAG, error.message)
+                    mListView.showErrorScreen()
                 })
     }
 
@@ -49,11 +50,10 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                     }
                     mListView.addPostsPerPage(postsList.reversed())
                 }, { error ->
-                    Log.e(TAG, error.message) //TODO show error screen
+                    Log.e(TAG, error.message)
+                    mListView.showErrorToast()
                 })
     }
-
-    //TODO handle errors every were
 
     override fun getNewPosts() {
         mRepository.getNewPosts(lastShownDate).observeOn(AndroidSchedulers.mainThread())
@@ -64,7 +64,8 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                     }
                     mListView.addNewPosts(postsList)
                 }, { error ->
-                    Log.e(TAG, error.message) //TODO show error screen
+                    Log.e(TAG, error.message)
+                    mListView.showErrorToast()
                 })
     }
 
@@ -81,7 +82,6 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
     override fun getNewPostsCount() {
         mySubscriber.dispose()
         mySubscriber = MySubscriber(mListView)
-        Log.e(TAG, "lastShownDate " + lastShownDate)
         mRepository.getNewPostsCount(lastShownDate)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -90,17 +90,15 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
     class MySubscriber(private val mListView: ListContract.ListView) : DisposableSubscriber<Long>() {
         override fun onComplete() {
-            Log.e(TAG, "Comleted")
+            Log.d(TAG, "Complete")
         }
 
         override fun onNext(numberOfNewPosts: Long?) {
-            Log.e(TAG, "onNext " + numberOfNewPosts)
             mListView.updateNewPostsCounter(numberOfNewPosts!!)
         }
 
         override fun onError(t: Throwable?) {
-            Log.e(TAG, "Error")
-            Log.e(TAG, t!!.message) //TODO handle
+            Log.e(TAG, t!!.message)
         }
 
     }

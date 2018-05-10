@@ -7,6 +7,7 @@ import android.transition.Explode
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import com.mysuperdispatch.test.daxxtestapp.R
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import kotlinx.android.synthetic.main.activity_list.*
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 class ListActivity : AppCompatActivity(), ListContract.ListView {
+
     private lateinit var mListPresenter: ListContract.ListPresenter
     private lateinit var adapter: ListAdapter
 
@@ -35,14 +37,12 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             mListPresenter.getNewPosts()
             mListPresenter.getNewPostsCount()
         }
-        Log.d(TAG, "create")
     }
 
     override fun onResume() {
         super.onResume()
         mListPresenter.startPostGeneration()
         mListPresenter.getNewPostsCount()
-        Log.d(TAG, "resume")
     }
 
     override fun onPause() {
@@ -79,6 +79,16 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
 
     }
 
+    override fun showErrorScreen() {
+        error_container.visibility = View.VISIBLE
+        frame_layout_list.visibility = View.GONE
+        clear_button.visibility = View.GONE
+    }
+
+    override fun showErrorToast() {
+        Toast.makeText(applicationContext, getString(R.string.error_text), Toast.LENGTH_SHORT).show()
+    }
+
     private fun setupRecyclerView(recyclerView: RecyclerView, posts: List<Post>) {
         adapter = ListAdapter(LinkedList(posts))
         recyclerView.adapter = adapter
@@ -98,7 +108,6 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             super.onScrolled(recyclerView, dx, dy)
             if (!(recyclerView?.canScrollVertically(1))!!
                     && recyclerView.adapter.itemCount >= 10) {
-                Log.e(TAG, "LOAD!")
                 mListPresenter.getPostsPerPage()
             }
         }

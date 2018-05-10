@@ -8,8 +8,6 @@ interface Repository {
 
     fun startPostGeneration()
 
-    fun savePosts(posts: List<Post>)
-
     fun getPostsPerPage(lastSmallestShownDate: Long): Single<List<Post>>
 
     fun getPostsRefresh(lastShownDate: Long): Single<List<Post>>

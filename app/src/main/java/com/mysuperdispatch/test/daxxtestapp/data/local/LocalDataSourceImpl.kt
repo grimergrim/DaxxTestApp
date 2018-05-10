@@ -1,19 +1,17 @@
 package com.mysuperdispatch.test.daxxtestapp.data.local
 
-import android.util.Log
 import com.mysuperdispatch.test.daxxtestapp.data.local.db.PostDao
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import com.mysuperdispatch.test.daxxtestapp.util.PrefsUtils
 import io.reactivex.Flowable
 import io.reactivex.Single
-import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
 class LocalDataSourceImpl(private val postDao: PostDao,
                           private val prefsUtils: PrefsUtils) : LocalDataSource {
 
     private var fixedRateTimer = fixedRateTimer(System.currentTimeMillis().toString(), false,
-            0.toLong(), 1000) {
+            0.toLong(), GENERATION_INTERVAL) {
 
     }
 
@@ -29,7 +27,7 @@ class LocalDataSourceImpl(private val postDao: PostDao,
             }
         }).start()
         fixedRateTimer = fixedRateTimer(java.lang.System.currentTimeMillis().toString(), false,
-                0.toLong(), 1000) {
+                0.toLong(), GENERATION_INTERVAL) {
             generatePost(getNumberOfPosts())
         }
     }

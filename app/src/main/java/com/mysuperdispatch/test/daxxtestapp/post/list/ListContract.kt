@@ -15,6 +15,10 @@ interface ListContract {
 
         fun updateNewPostsCounter(count: Long);
 
+        fun showErrorScreen()
+
+        fun showErrorToast()
+
     }
 
     interface ListPresenter {

@@ -7,10 +7,6 @@ import io.reactivex.Single
 
 class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository {
 
-    override fun savePosts(posts: List<Post>) {
-//        mLocalDataSource.savePosts(posts)
-    }
-
     override fun deletePosts() {
         mLocalDataSource.deletePosts()
     }
