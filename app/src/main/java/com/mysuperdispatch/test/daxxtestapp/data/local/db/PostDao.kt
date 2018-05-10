@@ -33,4 +33,7 @@ interface PostDao {
     @Query("SELECT COUNT(*) FROM posts WHERE publishedAt > :lastShownDate")
     fun getNewPostsCount(lastShownDate: Long): Flowable<Long>
 
+    @Query("SELECT * FROM posts WHERE publishedAt > :lastShownDate ORDER BY publishedAt ASC")
+    fun getNewPosts(lastShownDate: Long): Single<List<Post>>
+
 }

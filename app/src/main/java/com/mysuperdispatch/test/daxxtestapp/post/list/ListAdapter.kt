@@ -8,8 +8,9 @@ import android.widget.TextView
 import com.mysuperdispatch.test.daxxtestapp.R
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import kotlinx.android.synthetic.main.item_list_content.view.*
+import java.util.*
 
-class ListAdapter(private val values: MutableList<Post>) :
+class ListAdapter(private val values: LinkedList<Post>) :
         RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +27,11 @@ class ListAdapter(private val values: MutableList<Post>) :
     }
 
     override fun getItemCount() = values.size
+
+    fun addNewPosts(posts: List<Post>) {
+        for (item in posts) values.push(item)
+        notifyDataSetChanged()
+    }
 
     fun clear() {
         values.clear()

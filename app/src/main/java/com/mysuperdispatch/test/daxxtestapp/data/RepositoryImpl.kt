@@ -31,4 +31,8 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
         return mLocalDataSource.getNewPostsCount(lastShownDate)
     }
 
+    override fun getNewPosts(lastShownDate: Long): Single<List<Post>> {
+        return mLocalDataSource.getNewPosts(lastShownDate)
+    }
+
 }

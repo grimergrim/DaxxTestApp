@@ -33,6 +33,10 @@ class LocalDataSourceImpl(private val postDao: PostDao,
         return postDao.getNewPostsCount(lastShownDate)
     }
 
+    override fun getNewPosts(lastShownDate: Long): Single<List<Post>> {
+        return postDao.getNewPosts(lastShownDate)
+    }
+
     private fun generatePost(i: Long) {
         var counter: Long = i
         while (generate) {

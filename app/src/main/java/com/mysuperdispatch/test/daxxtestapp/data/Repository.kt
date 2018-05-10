@@ -18,4 +18,6 @@ interface Repository {
 
     fun getNewPostsCount(lastShownDate: Long): Flowable<Long>
 
+    fun getNewPosts(lastShownDate: Long): Single<List<Post>>
+
 }

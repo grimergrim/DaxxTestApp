@@ -1,8 +1,10 @@
 package com.mysuperdispatch.test.daxxtestapp.post.list
 
 import android.util.Log
+import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import com.mysuperdispatch.test.daxxtestapp.util.Injection
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -33,6 +35,18 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                     Log.e(TAG, error.message) //TODO show error screen
                 })
     }
+
+    override fun getNewPosts() {
+        mRepository.getNewPosts(lastShownDate).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ postsList ->
+                    mListView.addNewPosts(postsList)
+                    lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
+                }, { error ->
+                    Log.e(TAG, error.message) //TODO show error screen
+                })
+    }
+
 
     companion object {
         private val TAG = ListPresenter::class.java.simpleName

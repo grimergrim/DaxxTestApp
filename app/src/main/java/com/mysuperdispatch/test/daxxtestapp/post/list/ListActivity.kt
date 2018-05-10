@@ -12,9 +12,9 @@ import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.item_list.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 
 class ListActivity : AppCompatActivity(), ListContract.ListView {
-
     private lateinit var mListPresenter: ListContract.ListPresenter
     private lateinit var adapter: ListAdapter
 
@@ -29,7 +29,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
             adapter.clear()
             mListPresenter.deletePosts() }
         swipe_refresh_list.setOnRefreshListener({ mListPresenter.getPosts() })
-        new_posts_counter.setOnClickListener {  } //TODO set listener
+        new_posts_counter.setOnClickListener { mListPresenter.getNewPosts() }
         mListPresenter.getNewPostsCount()
     }
 
@@ -41,6 +41,10 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     override fun onPause() {
         super.onPause()
         mListPresenter.stopPostGeneration()
+    }
+
+    override fun addNewPosts(posts: List<Post>) {
+        adapter.addNewPosts(posts)
     }
 
     override fun showPosts(posts: List<Post>) {
@@ -62,7 +66,7 @@ class ListActivity : AppCompatActivity(), ListContract.ListView {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, posts: List<Post>) {
-        adapter = ListAdapter(posts.toMutableList())
+        adapter = ListAdapter(LinkedList(posts))
         recyclerView.adapter = adapter
     }
 
