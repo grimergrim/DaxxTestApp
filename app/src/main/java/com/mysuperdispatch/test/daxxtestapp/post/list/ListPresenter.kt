@@ -9,6 +9,7 @@ import io.reactivex.subscribers.DisposableSubscriber
 class ListPresenter(private val mListView: ListContract.ListView) : ListContract.ListPresenter {
 
     private val mRepository = Injection.getRepositoryInstance()
+    private var mySubscriber: MySubscriber = MySubscriber(mListView)
     private var lastShownDate: Long = 0
     private var lastSmallestShownDate: Long = Long.MAX_VALUE
 
@@ -18,6 +19,10 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
     override fun stopPostGeneration() {
         mRepository.stopPostGeneration()
+    }
+
+    override fun onPause() {
+        mySubscriber.dispose()
     }
 
     override fun deletePosts() {
@@ -30,7 +35,7 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getPostsRefresh(lastShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    if (postsList.size > 0) {
+                    if (postsList.isNotEmpty()) {
                         lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
                         lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
                     }
@@ -45,7 +50,7 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getPostsPerPage(lastSmallestShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    if (postsList.size > 0) {
+                    if (postsList.isNotEmpty()) {
                         lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
                     }
                     mListView.addPostsPerPage(postsList.reversed())
@@ -59,7 +64,7 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
         mRepository.getNewPosts(lastShownDate).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
-                    if (postsList.size > 0) {
+                    if (postsList.isNotEmpty()) {
                         lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
                     }
                     mListView.addNewPosts(postsList)
@@ -68,16 +73,6 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                     mListView.showErrorToast()
                 })
     }
-
-    override fun onPause() {
-        mySubscriber.dispose()
-    }
-
-    companion object {
-        private val TAG = ListPresenter::class.java.simpleName
-    }
-
-    var mySubscriber: MySubscriber = MySubscriber(mListView)
 
     override fun getNewPostsCount() {
         mySubscriber.dispose()
@@ -88,7 +83,11 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 .subscribeWith(mySubscriber)
     }
 
-    class MySubscriber(private val mListView: ListContract.ListView) : DisposableSubscriber<Long>() {
+    companion object {
+        private val TAG = ListPresenter::class.java.simpleName
+    }
+
+    private class MySubscriber(private val mListView: ListContract.ListView) : DisposableSubscriber<Long>() {
         override fun onComplete() {
             Log.d(TAG, "Complete")
         }

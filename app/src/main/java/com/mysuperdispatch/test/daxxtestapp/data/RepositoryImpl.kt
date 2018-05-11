@@ -1,7 +1,7 @@
 package com.mysuperdispatch.test.daxxtestapp.data
 
-import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import com.mysuperdispatch.test.daxxtestapp.data.local.LocalDataSource
+import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -20,7 +20,7 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
     }
 
     override fun startPostGeneration() {
-            mLocalDataSource.startPostGeneration()
+        mLocalDataSource.startPostGeneration()
     }
 
     override fun stopPostGeneration() {

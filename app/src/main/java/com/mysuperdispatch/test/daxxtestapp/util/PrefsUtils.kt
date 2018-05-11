@@ -18,8 +18,8 @@ class PrefsUtils(context: Context) {
     }
 
     companion object {
-        private val PREFS_FILENAME = "com.mysuperdispatch.test"
-        private val FIRST_START = "firstStartHappened"
+        private const val PREFS_FILENAME = "com.my.super.dispatch.test"
+        private const val FIRST_START = "firstStartHappened"
     }
 
 }

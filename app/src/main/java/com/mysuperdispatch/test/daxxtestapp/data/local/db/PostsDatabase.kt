@@ -6,14 +6,16 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 
-@Database(entities = arrayOf(Post::class), version = 1)
+@Database(entities = [(Post::class)], version = 1)
 abstract class PostsDatabase : RoomDatabase() {
 
     abstract fun postDao(): PostDao
 
     companion object {
 
-        @Volatile private var INSTANCE: PostsDatabase? = null
+        @Volatile
+        private var INSTANCE: PostsDatabase? = null
+        private const val DB_NAME = "MySuperDispatch.db"
 
         fun getInstance(context: Context): PostsDatabase =
                 INSTANCE ?: synchronized(this) {
@@ -22,7 +24,7 @@ abstract class PostsDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(context.applicationContext,
-                        PostsDatabase::class.java, "MySuperDispatch.db")
+                        PostsDatabase::class.java, DB_NAME)
                         .build()
     }
 }
