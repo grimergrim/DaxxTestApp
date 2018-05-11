@@ -50,8 +50,8 @@ class PostDaoTest {
     }
 
     companion object {
-        private val POST = Post("Title", "Author", 13121241, 1)
         private const val TITLE = "Title"
         private const val AUTHOR = "Author"
+        private val POST = Post(TITLE, AUTHOR, 13121241, 1)
     }
 }
