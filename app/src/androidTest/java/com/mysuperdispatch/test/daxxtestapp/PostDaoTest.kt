@@ -1,6 +1,5 @@
 package com.mysuperdispatch.test.daxxtestapp
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -9,7 +8,6 @@ import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
