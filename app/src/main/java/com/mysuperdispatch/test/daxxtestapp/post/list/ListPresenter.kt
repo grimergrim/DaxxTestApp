@@ -66,6 +66,9 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
                         lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
+                        if (lastSmallestShownDate == Long.MAX_VALUE) {
+                            lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
+                        }
                     }
                     mListView.addNewPosts(postsList)
                 }, { error ->
