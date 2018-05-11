@@ -44,7 +44,7 @@ class LocalDataSourceImpl(private val postDao: PostDao,
 
     override fun startPostGeneration() {
         fixedRateTimer.cancel()
-        Thread(Runnable {
+        fixedRateTimer = fixedRateTimer(NAME, false, 0.toLong(), INTERVAL) {
             if (prefsUtils.getFirstStart()) {
                 for (i in 1..POSTS_AMOUNT) {
                     postDao.insertPost(Post(TITLE + i, AUTHOR + i,
@@ -52,8 +52,6 @@ class LocalDataSourceImpl(private val postDao: PostDao,
                 }
                 prefsUtils.saveFirstStart()
             }
-        }).start()
-        fixedRateTimer = fixedRateTimer(NAME, false, 0.toLong(), INTERVAL) {
             generatePost(getNumberOfPosts())
         }
     }
