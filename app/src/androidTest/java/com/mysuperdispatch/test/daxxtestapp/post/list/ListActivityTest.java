@@ -1,6 +1,5 @@
 package com.mysuperdispatch.test.daxxtestapp.post.list;
 
-
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
