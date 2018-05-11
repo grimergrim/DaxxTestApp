@@ -16,9 +16,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PostDaoTest {
 
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
-
     private lateinit var database: PostsDatabase
 
     @Before
@@ -42,7 +39,7 @@ class PostDaoTest {
     }
 
     @Test
-    fun insertAndCheckAmount() {
+    fun insertAndCheckAmountTest() {
         val postsAmount = 20L
         for (i in 1..postsAmount) {
             database.postDao().insertPost(Post(TITLE + i, AUTHOR + i,
