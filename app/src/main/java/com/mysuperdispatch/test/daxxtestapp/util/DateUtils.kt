@@ -5,7 +5,7 @@ import java.util.*
 
 object DateUtils {
 
-    private const val TEMPLATE = "d MMM yyyy HH:mm:ss Z"
+    private const val TEMPLATE = "d MMM yyyy HH:mm:ss"
 
     fun convertToStringDate(timestamp: Long): String {
         return convertToString(Date(timestamp))

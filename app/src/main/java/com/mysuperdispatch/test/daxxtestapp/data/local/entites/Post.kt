@@ -15,6 +15,6 @@ class Post(@ColumnInfo(name = "title")
            val index: Long) {
 
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var id: Long = 0
 
 }
