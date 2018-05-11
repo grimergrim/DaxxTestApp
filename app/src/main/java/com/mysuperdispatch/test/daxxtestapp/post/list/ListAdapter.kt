@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.mysuperdispatch.test.daxxtestapp.R
 import com.mysuperdispatch.test.daxxtestapp.data.local.entites.Post
+import com.mysuperdispatch.test.daxxtestapp.util.DateUtils
 import kotlinx.android.synthetic.main.item_list_content.view.*
 import java.util.*
 
@@ -23,7 +24,7 @@ class ListAdapter(private val values: LinkedList<Post>) :
         val item = values[position]
         holder.titleView.text = item.title
         holder.authorView.text = item.author
-        holder.dateView.text = item.publishedAt.toString()
+        holder.dateView.text = DateUtils.convertToStringDate(item.publishedAt)
     }
 
     override fun getItemCount() = values.size
