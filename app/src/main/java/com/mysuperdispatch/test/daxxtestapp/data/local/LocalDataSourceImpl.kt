@@ -57,10 +57,13 @@ class LocalDataSourceImpl(private val postDao: PostDao,
     }
 
     private fun generatePost(i: Long) {
-        postDao.insertPost(Post(TITLE + i, AUTHOR + i, System.currentTimeMillis(), i))
+        for (y in i..i + POSTS_PER_SECOND) {
+            postDao.insertPost(Post(TITLE + y, AUTHOR + y, System.currentTimeMillis(), y))
+        }
     }
 
     companion object {
+        private const val POSTS_PER_SECOND = 4 //5 posts will be generated
         private const val POSTS_AMOUNT = 100
         private const val INTERVAL = 1000L //1 sec
         private const val NAME = "PostsGenerationTimer"

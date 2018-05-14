@@ -21,7 +21,7 @@ interface PostDao {
     @Query("SELECT MAX(`index`) FROM posts")
     fun getMaxIndex(): Long
 
-    @Query("SELECT * FROM posts ORDER BY publishedAt DESC LIMIT 10")
+    @Query("SELECT * FROM posts ORDER BY 'index' DESC LIMIT 10")
     fun getPostsRefresh(): Single<List<Post>>
 
     @Query("SELECT COUNT(*) FROM posts WHERE publishedAt > :lastShownDate")

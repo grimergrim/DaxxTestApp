@@ -36,8 +36,8 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
-                        lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
-                        lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
+                        lastShownDate = postsList.maxBy { post -> post.index }?.index!!
+                        lastSmallestShownDate = postsList.minBy { post -> post.index }?.index!!
                     }
                     mListView.showPosts(postsList)
                 }, { error ->
@@ -51,7 +51,7 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
-                        lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
+                        lastSmallestShownDate = postsList.minBy { post -> post.index }?.index!!
                     }
                     mListView.addPostsPerPage(postsList.reversed())
                 }, { error ->
@@ -65,9 +65,9 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
-                        lastShownDate = postsList.maxBy { post -> post.publishedAt }?.publishedAt!!
+                        lastShownDate = postsList.maxBy { post -> post.index }?.index!!
                         if (lastSmallestShownDate == Long.MAX_VALUE) {
-                            lastSmallestShownDate = postsList.minBy { post -> post.publishedAt }?.publishedAt!!
+                            lastSmallestShownDate = postsList.minBy { post -> post.index }?.index!!
                         }
                     }
                     mListView.addNewPosts(postsList)
