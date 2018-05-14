@@ -11,8 +11,8 @@ class Post(@ColumnInfo(name = "title")
            val author: String,
            @ColumnInfo(name = "publishedAt")
            val publishedAt: Long,
-           @ColumnInfo(name = "index")
-           val index: Long) {
+           @ColumnInfo(name = "indexCounter")
+           val indexCounter: Long) {
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

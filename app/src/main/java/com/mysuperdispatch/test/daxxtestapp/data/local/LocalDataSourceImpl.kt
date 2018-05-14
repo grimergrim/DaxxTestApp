@@ -12,23 +12,23 @@ class LocalDataSourceImpl(private val postDao: PostDao,
 
     private var fixedRateTimer = fixedRateTimer(NAME, false, 0.toLong(), INTERVAL) { }
 
-    override fun getNewPostsCount(lastShownDate: Long): Flowable<Long> {
-        return postDao.getNewPostsCount(lastShownDate)
+    override fun getNewPostsCount(lastShownIndex: Long): Flowable<Long> {
+        return postDao.getNewPostsCount(lastShownIndex)
     }
 
-    override fun getNewPosts(lastShownDate: Long): Single<List<Post>> {
-        return postDao.getNewPosts(lastShownDate)
+    override fun getNewPosts(lastShownIndex: Long): Single<List<Post>> {
+        return postDao.getNewPosts(lastShownIndex)
     }
 
     private fun getNumberOfPosts(): Long {
         return postDao.getMaxIndex() + 1
     }
 
-    override fun getPostsPerPage(lastSmallestShownDate: Long): Single<List<Post>> {
-        return postDao.getPostsPerPage(lastSmallestShownDate)
+    override fun getPostsPerPage(lastSmallestShownIndex: Long): Single<List<Post>> {
+        return postDao.getPostsPerPage(lastSmallestShownIndex)
     }
 
-    override fun getPostsRefresh(lastShownDate: Long): Single<List<Post>> {
+    override fun getPostsRefresh(lastShownIndex: Long): Single<List<Post>> {
         return postDao.getPostsRefresh()
     }
 

@@ -10,8 +10,8 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
     private val mRepository = Injection.getRepositoryInstance()
     private var mySubscriber: MySubscriber = MySubscriber(mListView)
-    private var lastShownDate: Long = 0
-    private var lastSmallestShownDate: Long = Long.MAX_VALUE
+    private var lastShownIndex: Long = 0
+    private var lastSmallestShownIndex: Long = Long.MAX_VALUE
 
     override fun startPostGeneration() {
         mRepository.startPostGeneration()
@@ -27,17 +27,18 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
 
     override fun deletePosts() {
         mRepository.deletePosts()
-        lastShownDate = 0
-        lastSmallestShownDate = Long.MAX_VALUE
+        lastShownIndex = 0
+        lastSmallestShownIndex = Long.MAX_VALUE
+        getNewPostsCount()
     }
 
     override fun getPostsRefresh() {
-        mRepository.getPostsRefresh(lastShownDate).observeOn(AndroidSchedulers.mainThread())
+        mRepository.getPostsRefresh(lastShownIndex).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
-                        lastShownDate = postsList.maxBy { post -> post.index }?.index!!
-                        lastSmallestShownDate = postsList.minBy { post -> post.index }?.index!!
+                        lastShownIndex = postsList.maxBy { post -> post.indexCounter }?.indexCounter!!
+                        lastSmallestShownIndex = postsList.minBy { post -> post.indexCounter }?.indexCounter!!
                     }
                     mListView.showPosts(postsList)
                 }, { error ->
@@ -47,11 +48,11 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
     }
 
     override fun getPostsPerPage() {
-        mRepository.getPostsPerPage(lastSmallestShownDate).observeOn(AndroidSchedulers.mainThread())
+        mRepository.getPostsPerPage(lastSmallestShownIndex).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
-                        lastSmallestShownDate = postsList.minBy { post -> post.index }?.index!!
+                        lastSmallestShownIndex = postsList.minBy { post -> post.indexCounter }?.indexCounter!!
                     }
                     mListView.addPostsPerPage(postsList.reversed())
                 }, { error ->
@@ -61,13 +62,13 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
     }
 
     override fun getNewPosts() {
-        mRepository.getNewPosts(lastShownDate).observeOn(AndroidSchedulers.mainThread())
+        mRepository.getNewPosts(lastShownIndex).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ postsList ->
                     if (postsList.isNotEmpty()) {
-                        lastShownDate = postsList.maxBy { post -> post.index }?.index!!
-                        if (lastSmallestShownDate == Long.MAX_VALUE) {
-                            lastSmallestShownDate = postsList.minBy { post -> post.index }?.index!!
+                        lastShownIndex = postsList.maxBy { post -> post.indexCounter }?.indexCounter!!
+                        if (lastSmallestShownIndex == Long.MAX_VALUE) {
+                            lastSmallestShownIndex = postsList.minBy { post -> post.indexCounter }?.indexCounter!!
                         }
                     }
                     mListView.addNewPosts(postsList)
@@ -80,7 +81,7 @@ class ListPresenter(private val mListView: ListContract.ListView) : ListContract
     override fun getNewPostsCount() {
         mySubscriber.dispose()
         mySubscriber = MySubscriber(mListView)
-        mRepository.getNewPostsCount(lastShownDate)
+        mRepository.getNewPostsCount(lastShownIndex)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribeWith(mySubscriber)

@@ -18,19 +18,19 @@ interface PostDao {
     @Query("DELETE FROM posts")
     fun deleteAllPosts()
 
-    @Query("SELECT MAX(`index`) FROM posts")
+    @Query("SELECT MAX(`indexCounter`) FROM posts")
     fun getMaxIndex(): Long
 
-    @Query("SELECT * FROM posts ORDER BY 'index' DESC LIMIT 10")
+    @Query("SELECT * FROM posts ORDER BY indexCounter DESC LIMIT 10")
     fun getPostsRefresh(): Single<List<Post>>
 
-    @Query("SELECT COUNT(*) FROM posts WHERE publishedAt > :lastShownDate")
-    fun getNewPostsCount(lastShownDate: Long): Flowable<Long>
+    @Query("SELECT COUNT(*) FROM posts WHERE indexCounter > :lastShownIndex")
+    fun getNewPostsCount(lastShownIndex: Long): Flowable<Long>
 
-    @Query("SELECT * FROM posts WHERE publishedAt > :lastShownDate ORDER BY publishedAt ASC")
-    fun getNewPosts(lastShownDate: Long): Single<List<Post>>
+    @Query("SELECT * FROM posts WHERE indexCounter > :lastShownIndex ORDER BY indexCounter ASC")
+    fun getNewPosts(lastShownIndex: Long): Single<List<Post>>
 
-    @Query("SELECT * FROM (SELECT * FROM posts WHERE publishedAt < :lastSmallestShownDate ORDER BY publishedAt DESC LIMIT 10) T1 ORDER BY publishedAt")
-    fun getPostsPerPage(lastSmallestShownDate: Long): Single<List<Post>>
+    @Query("SELECT * FROM (SELECT * FROM posts WHERE indexCounter < :lastSmallestShownIndex ORDER BY indexCounter DESC LIMIT 10) T1 ORDER BY indexCounter")
+    fun getPostsPerPage(lastSmallestShownIndex: Long): Single<List<Post>>
 
 }

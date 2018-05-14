@@ -11,12 +11,12 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
         mLocalDataSource.deletePosts()
     }
 
-    override fun getPostsPerPage(lastSmallestShownDate: Long): Single<List<Post>> {
-        return mLocalDataSource.getPostsPerPage(lastSmallestShownDate)
+    override fun getPostsPerPage(lastSmallestShownIndex: Long): Single<List<Post>> {
+        return mLocalDataSource.getPostsPerPage(lastSmallestShownIndex)
     }
 
-    override fun getPostsRefresh(lastShownDate: Long): Single<List<Post>> {
-        return mLocalDataSource.getPostsRefresh(lastShownDate)
+    override fun getPostsRefresh(lastShownIndex: Long): Single<List<Post>> {
+        return mLocalDataSource.getPostsRefresh(lastShownIndex)
     }
 
     override fun startPostGeneration() {
@@ -27,12 +27,12 @@ class RepositoryImpl(private val mLocalDataSource: LocalDataSource) : Repository
         mLocalDataSource.stopPostGeneration()
     }
 
-    override fun getNewPostsCount(lastShownDate: Long): Flowable<Long> {
-        return mLocalDataSource.getNewPostsCount(lastShownDate)
+    override fun getNewPostsCount(lastShownIndex: Long): Flowable<Long> {
+        return mLocalDataSource.getNewPostsCount(lastShownIndex)
     }
 
-    override fun getNewPosts(lastShownDate: Long): Single<List<Post>> {
-        return mLocalDataSource.getNewPosts(lastShownDate)
+    override fun getNewPosts(lastShownIndex: Long): Single<List<Post>> {
+        return mLocalDataSource.getNewPosts(lastShownIndex)
     }
 
 }
