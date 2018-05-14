@@ -33,7 +33,7 @@ class PostDaoTest {
     fun insertAndCheckIndexTest() {
         database.postDao().insertPost(POST)
         val maxIndex = database.postDao().getMaxIndex()
-        assertEquals(POST.index, maxIndex)
+        assertEquals(POST.indexCounter, maxIndex)
     }
 
     @Test
